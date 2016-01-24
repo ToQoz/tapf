@@ -1,0 +1,49 @@
+#!/bin/sh
+
+name=tapf
+test_result=0
+test_count=0
+
+tap_test() {
+  test_count=$((test_count+1))
+  cmd=$1
+
+  sh "$cmd" 2> /tmp/$name.err.$$ 1> /tmp/$name.out.$$
+  ret=$?
+
+  out=$(cat /tmp/$name.out.$$)
+  err=$(cat /tmp/$name.err.$$)
+  rm /tmp/$name.err.$$ /tmp/$name.out.$$
+
+  if [ $ret != 0 ]; then
+      /bin/echo -n "not "
+  fi
+
+  echo "ok $test_count - $cmd"
+
+  if [ $ret != 0 ]; then
+      if [ -n "$out$err" ]; then
+        echo "  ---"
+      fi
+
+      if [ -n "$out" ]; then
+        echo "  stdout: |"
+        /bin/echo -n "$out" | sed -e "s/^/    /"
+      fi
+
+      if [ -n "$err" ]; then
+        echo "  stderr: |"
+        /bin/echo -n "$err" | sed -e "s/^/    /"
+      fi
+      test_result=$ret
+  fi
+}
+
+echo "TAP version 13"
+echo "1..$#"
+
+for test in $@; do
+  tap_test $test
+done
+
+exit $_test_result
