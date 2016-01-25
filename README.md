@@ -5,7 +5,7 @@ TAP producer for shell scripts
 - 1 file 1 test
 - exit code is test result
 
-# Usage
+## Usage
 
 ```
 $ echo "[ 0 != 1 ]" > test_1.sh
