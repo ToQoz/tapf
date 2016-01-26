@@ -46,4 +46,4 @@ for test in $@; do
   tap_test $test
 done
 
-exit $_test_result
+exit $test_result
