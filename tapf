@@ -17,7 +17,6 @@ shift $((OPTIND - 1))
 
 tap_test() {
   test_count=$((test_count+1))
-  echo $OPT_E
   cmd="$1"
 
   if [ -z "$executer" ]; then
