@@ -4,11 +4,27 @@ name=tapf
 test_result=0
 test_count=0
 
+while getopts e: opt
+do
+  case ${opt} in
+  e)
+    executer=${OPTARG};;
+  \?)
+    exit 1;;
+  esac
+done
+shift $((OPTIND - 1))
+
 tap_test() {
   test_count=$((test_count+1))
-  cmd=$1
+  echo $OPT_E
+  cmd="$1"
 
-  sh "$cmd" 2> /tmp/$name.err.$$ 1> /tmp/$name.out.$$
+  if [ -z "$executer" ]; then
+    executer="sh"
+  fi
+
+  $executer "$cmd" 2> /tmp/$name.err.$$ 1> /tmp/$name.out.$$
   ret=$?
 
   out=$(cat /tmp/$name.out.$$)
